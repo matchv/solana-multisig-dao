@@ -1,0 +1,21 @@
+[features]
+seeds = true
+
+[programs.mainnet]
+odf_multisig = "2TgmKJAueFZAG4z6iWXhWC6CkPN8ZrUgbg2CWUkAoUhe"
+
+[programs.devnet]
+odf_multisig = "2TgmKJAueFZAG4z6iWXhWC6CkPN8ZrUgbg2CWUkAoUhe"
+
+[programs.localnet]
+odf_multisig = "2TgmKJAueFZAG4z6iWXhWC6CkPN8ZrUgbg2CWUkAoUhe"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "npx mocha -t 1000000 tests/"
