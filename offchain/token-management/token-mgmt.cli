@@ -1,0 +1,144 @@
+# OUTD token on devnet
+https://explorer.solana.com/address/A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP?cluster=devnet
+
+# install Rust
+
+# install Solana SPL Token CLI utility
+cargo install spl-token-cli
+
+spl-token --help # for help info
+
+# check the default config
+solana config get
+
+Config File: ${HOME}/.config/solana/cli/config.yml
+
+# toggle this between devnet and mainnet-bata
+RPC URL: https://api.mainnet-beta.solana.com
+WebSocket URL: wss://api.mainnet-beta.solana.com/ (computed)
+# create multiple keypairs
+# set one as default
+Keypair Path: ${HOME}/.config/solana/id.json
+
+# set devnet or mainnet
+solana config set --url https://api.devnet.solana.com
+
+# set default keypair
+solana config set --keypair ${HOME}/new-keypair.json
+
+# hardware wallet, such as a nano ledger in a USB drive
+solana config set --keypair usb://ledger/
+
+# airdrop some devnet SOL
+solana airdrop 2
+
+# check SOL balance
+solana balance
+
+# check all the tokens you own
+spl-token accounts 
+
+# check ERC20 token supply and balance
+
+# token mint address: A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP
+spl-token supply A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP
+
+spl-token balance A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP
+
+# token mint info 
+spl-token account-info A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP
+
+# mint ODF token
+# the plan is to mint 0 supply first, set self to be the mint and freezing authority 
+# create a multisig wallet 
+# transfer authority to the multisig wallet 
+
+../create-defn-token 
+ts-node mint.js
+
+# create a ATA account for your pubkey corresponding to the token you just minted
+# you will pay a little fee to create your own wallet's ATA
+
+spl-token create-account A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP
+
+# if you have to
+# run this command to create ATA for "--owner" account
+# --fee-payer will pay the fee for this ATA creation
+spl-token create-account --owner $PK_ALICE --fee-payer $KP_YOURS $SOME_TOKEN_MINT
+
+
+
+# create 3 signer keys
+for i in {1..3}
+do
+   echo "generating $i key"
+   solana-keygen new --no-passphrase --outfile ~/path/to/OutDefine/token/offchain/token-management/keypairs/key-$i.json
+   sleep 1
+done
+
+# this will generate 3 key pairs, with the private key written into key-1.json, key-2.json, key-3.json file
+
+pubkey-1: rjMCEgQcQhUo9epZBiAzTTGkLBz7Ark8A8ErwNy1QdZ
+pubkey-2: 3zpQHsiQwUpwZ3xuiyCnKWpcurj8PoVmvRpisudX7fwj
+pubkey-3: GjxbDbnCibZ86yTvKB9W2rjKMhbSwSGJoqpZACitDtzK
+
+# create a multisig wallet with the above 3 pub keys 
+# note 2 is 2/3 thredshold of signing
+spl-token create-multisig 2 rjMCEgQcQhUo9epZBiAzTTGkLBz7Ark8A8ErwNy1QdZ \
+3zpQHsiQwUpwZ3xuiyCnKWpcurj8PoVmvRpisudX7fwj GjxbDbnCibZ86yTvKB9W2rjKMhbSwSGJoqpZACitDtzK
+
+
+# Creating 2/3 multisig F2uU54ezT6HMMKTKuVgTsZJt3AL15sch54aP9qywVDo3 under program TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA
+F2uU54ezT6HMMKTKuVgTsZJt3AL15sch54aP9qywVDo3
+
+# transfer mint authority to multisig wallet
+# transfer freeze authority to multisig wallet
+# A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP is the OUTD token created with mint.ts script
+# F2uU54ezT6HMMKTKuVgTsZJt3AL15sch54aP9qywVDo3 is the multisig wallet address
+spl-token authorize A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP mint F2uU54ezT6HMMKTKuVgTsZJt3AL15sch54aP9qywVDo3
+
+# result
+Updating A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP
+  Current mint authority: 7tBtPbbhd5FRmPoqntDrg26G249BePLQNFSmh9xBYjQi
+  New mint authority: F2uU54ezT6HMMKTKuVgTsZJt3AL15sch54aP9qywVDo3
+
+# disable freeze authority
+spl-token authorize A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP freeze --disable 
+
+# result
+Updating A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP
+  Current freeze authority: 7tBtPbbhd5FRmPoqntDrg26G249BePLQNFSmh9xBYjQi
+  New freeze authority: disabled
+
+# check the updated token mint info 
+spl-token account-info A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP
+
+# mint more token with old mint authority key, should fail
+spl-token mint A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP 1000000000
+
+# mint more token with 2 signers
+# recipient H4umV6WDpTYWiFHjBFk44jJ3qMLSBBTVwM2ofGgwxGFk is the ATA of
+# recipient BZabyEUZufpNuAq2i14vxpNAqJAKgUThtGSVrzif7GQc - the multisig wallet created on snowflake.so
+# for token mint A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP
+
+# note that spl-token 2.2.0 doesn't work 
+# only spl-token-cli 2.0.16 works 
+# https://github.com/solana-labs/solana-program-library/issues/3409
+
+
+spl-token mint A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP 1000000000 H4umV6WDpTYWiFHjBFk44jJ3qMLSBBTVwM2ofGgwxGFk \
+--owner F2uU54ezT6HMMKTKuVgTsZJt3AL15sch54aP9qywVDo3 \
+--multisig-signer /path/to/key-1.json
+
+spl-token mint A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP 1000000000 H4umV6WDpTYWiFHjBFk44jJ3qMLSBBTVwM2ofGgwxGFk \
+--owner F2uU54ezT6HMMKTKuVgTsZJt3AL15sch54aP9qywVDo3 \
+--multisig-signer /path/to/key-1.json \
+--multisig-signer /path/to/key-2.json
+
+
+# create ATA for a mint
+spl-token create-account A7FoJn2mV81hYUC8jLR1Tk8nAoRv5mvfRA52b7fmMLXP
+
+# result
+BzQbe8VWo4BL9t6SH9QKGK9y2Qu17339HdRw5PZ3Qstf
+
