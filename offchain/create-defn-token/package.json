@@ -7,7 +7,6 @@
     "@metaplex-foundation/js": "^0.17.5",
     "@metaplex-foundation/mpl-token-metadata": "^2.5.1",
     "@solana/spl-token": "^0.3.6",
-    "@solana/web3.js": "^1.66.2",
-    "@types/bs58": "4.0.1"
+    "@solana/web3.js": "^1.66.2"
   }
 }
