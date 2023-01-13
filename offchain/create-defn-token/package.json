@@ -4,9 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@metaplex-foundation/js": "^0.17.5",
-    "@metaplex-foundation/mpl-token-metadata": "^2.5.1",
+    "@metaplex-foundation/js": "^0.17.6",
+    "@metaplex-foundation/mpl-token-metadata": "^2.5.2",
     "@solana/spl-token": "^0.3.6",
+<<<<<<< HEAD
     "@solana/web3.js": "^1.66.2"
+=======
+    "@solana/web3.js": "^1.67.0",
+    "dotenv": "^16.0.3"
+>>>>>>> main
   }
 }
