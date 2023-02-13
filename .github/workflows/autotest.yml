@@ -1,0 +1,30 @@
+name: Multisig Test
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  run:
+    environment: autotest
+    env:
+      DEPLOYER_PUB: ${{ secrets.DEPLOYER_PUB }}
+      DEPLOYER_PRIV: ${{ secrets.DEPLOYER_PRIV }}
+    name: Mint And Multisig
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+
+      - name: Install dependencies
+        working-directory: ./offchain/create-defn-token
+        run: yarn install
+
+      - name: Mint Token And Multisig Account Test
+        working-directory: ./offchain/create-defn-token
+        run: yarn autotest

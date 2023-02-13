@@ -6,10 +6,10 @@ import { DataV2, createCreateMetadataAccountV2Instruction } from '@metaplex-foun
 import { bundlrStorage, keypairIdentity, Metaplex, UploadMetadataInput } from '@metaplex-foundation/js';
 import secret from './secretKey.json';
 
+/*
 import * as dotenv from "dotenv";
 dotenv.config({ path: __dirname+'/.env' });
 
-/* 
 const deployer = process.env.DEPLOYER_PRIV;
 const mint_auth: string = (process.env.MINT_AUTHORITY_PUB as string);
 const freeze_auth: string = (process.env.FREEZE_AUTHORITY_PUB as string);
@@ -24,7 +24,7 @@ const solanaConnection = new Connection(endpoint);
 // token supply
 const MINT_CONFIG = {
     numDecimals: 9,
-    numberTokens: 1000000000  //todo: change to 0 upon production
+    numberTokens: 0  //todo: change to 0 upon production
 }
 
 // Reference: https://docs.metaplex.com/programs/token-metadata/token-standard#the-fungible-standard
@@ -161,7 +161,7 @@ const main = async() => {
         userWallet,
         mintKeypair,
         userWallet.publicKey, //todo: change recipient
-        userWallet.publicKey, //todo: change mint_authority
+        userWallet.publicKey, //todo: change mint_authority // multisig wallet
         userWallet.publicKey  //todo: change freeze_authority
     );
 
