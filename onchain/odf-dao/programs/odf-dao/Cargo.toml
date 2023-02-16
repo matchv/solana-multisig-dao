@@ -16,6 +16,6 @@ cpi = ["no-entrypoint"]
 default = []
 
 [dependencies]
-anchor-lang = { version="0.26.0", features=["init-if-needed"] }
-anchor-spl = { version="0.26.0" }
-solana-program = { version="1.15.2" }
+anchor-lang = { version="0.25.0", features=["init-if-needed"] }
+anchor-spl = { version="0.25.0" }
+solana-program = { version="1.10.41" }
