@@ -97,7 +97,7 @@ pub struct Init<'info> {
     #[account(
         init,
         seeds = [b"vault", mint_token.key().as_ref(), payer.key().as_ref()],
-        bump = bump.vault_bump,
+        bump,
         payer = payer,
         space = size_of::<Vault>() + 8,
     )]
@@ -106,7 +106,7 @@ pub struct Init<'info> {
     #[account(
         init,
         seeds = [b"vault_token", mint_token.key().as_ref(), vault.key().as_ref()],
-        bump = bump.vault_token,
+        bump,
         token::mint = mint_token,
         token::authority = vault,
         payer = payer,
@@ -116,7 +116,7 @@ pub struct Init<'info> {
     #[account(
         init, 
         seeds = [b"vault_mint", mint_token.key().as_ref(), vault.key().as_ref()],
-        bump = bump.mint_bump ,
+        bump,
         mint::authority = vault,
         mint::decimals = mint_token.decimals,
         payer = payer,
