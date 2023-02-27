@@ -1,14 +1,14 @@
 [features]
 seeds = false
 skip-lint = false
-[programs.devnet]
+[programs.localnet]
 odf_stake = "EqYPUiDkbgZTRJkbuoaEX6PytqYyx8RMEvaGqs99fMcE"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "devnet"
+cluster = "localnet"
 wallet = "/Users/ethan/.config/solana/id.json"
 
 [scripts]
