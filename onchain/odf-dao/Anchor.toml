@@ -2,14 +2,14 @@
 seeds = false
 skip-lint = false
 [programs.localnet]
-odf_dao = "7mcAL1zv1P5sdv6QE98NMvx1z9BPaLmQYzg3oRyJtpYB"
+odf_dao = "FWhQz5nK4MaSu3haRq2g1MrSrHm84VxYHfQ7WorJ7Tev"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
 cluster = "localnet"
-wallet = "/Users/username/.config/solana/id.json"
+wallet = "~/MyDev/MyCode/OutDefine/create-defn-token/guideSecret.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

@@ -8,7 +8,7 @@ use anchor_spl::token::{self, Mint, TokenAccount, Transfer, MintTo};
 use std::mem::size_of;
 pub mod errors;
 pub mod constant;
-declare_id!("EqYPUiDkbgZTRJkbuoaEX6PytqYyx8RMEvaGqs99fMcE");
+declare_id!("2E5K8Y6mpTc7Nv8cruWRYpz5DbAUqXFPnmZMpxE8Unvn");
 
 #[program]
 pub mod odf_stake {

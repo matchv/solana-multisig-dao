@@ -15,7 +15,7 @@ pub use utils::*;
 pub mod errors;
 pub use errors::*;
 
-declare_id!("7mcAL1zv1P5sdv6QE98NMvx1z9BPaLmQYzg3oRyJtpYB");
+declare_id!("FWhQz5nK4MaSu3haRq2g1MrSrHm84VxYHfQ7WorJ7Tev");
 
 #[program]
 pub mod odf_dao {
