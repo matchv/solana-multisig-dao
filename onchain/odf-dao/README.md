@@ -67,6 +67,8 @@ anchor test
 ### 6. Deploy
 
 ```bash=
+# If the local network is deployed, the local network node needs to be started, Startup script: `solana-test-validator`
+
 anchor deploy
 ...
 
