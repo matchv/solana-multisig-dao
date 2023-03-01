@@ -22,7 +22,7 @@ yarn
 anchor build
 ```
 
-#### 4. Update `program_id`
+### 4. Update `program_id`
 
 Get the public key of the deploy key. This keypair is generated automatically so a different key is exptected:
 

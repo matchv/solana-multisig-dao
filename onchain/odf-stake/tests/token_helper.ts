@@ -15,8 +15,8 @@ import {
 } from '@solana/spl-token'
 
 // @ts-ignore
-const stakeData = JSON.parse(fs.readFileSync('.keys/stake_mint.json'))
-const stakePayerKeypair = Keypair.fromSecretKey(new Uint8Array(stakeData))
+// const stakeData = JSON.parse(fs.readFileSync('.keys/stake_mint.json'))
+// const stakePayerKeypair = Keypair.fromSecretKey(new Uint8Array(stakeData))
 // const stakeMintAddress = stakeMintKeypair.publicKey
 class TokenHelper {
   connection: anchor.web3.Connection
@@ -36,7 +36,7 @@ class TokenHelper {
   }
 
   payerWallet = async (lamports = LAMPORTS_PER_SOL) => {
-    const wallet = stakePayerKeypair
+    const wallet = Keypair.generate()
     const signature = await this.connection.requestAirdrop(
       wallet.publicKey,
       lamports
