@@ -277,108 +277,108 @@ describe('Test Odf Stake', async () => {
       // assert.ok(memberVault.amount.eq(stakeAmount))
     })
   })
-  // describe('Test unStake', async () => {
-  //   it('3-1. test Take it without stake', async () => {
-  //     const stakeAmount = new anchor.BN(120)
-  //     const serial_number = new anchor.BN(1)
-  //     try {
-  //       await program.rpc.unStake(stakeAmount, serial_number, {
-  //         accounts: {
-  //           withdrawer: depositor.address,
-  //           vault: vault,
-  //           vaultToken: vaultToken,
-  //           vaultMint: vaultMint,
-  //           userVault: user_vault.address,
-  //           owner: program.provider.wallet.publicKey,
-  //           tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
-  //           stakeInfo: stake_info,
-  //         },
-  //       })
-  //     } catch (err) {
-  //       console.log('err.message:', err.message)
-  //       assert.ok(err.message.includes('not staked'))
-  //     }
-  //   })
+  describe('Test unStake', async () => {
+    it('3-1. test Take it without stake', async () => {
+      const stakeAmount = new anchor.BN(120)
+      const serial_number = new anchor.BN(1)
+      try {
+        await program.rpc.unStake(stakeAmount, serial_number, {
+          accounts: {
+            withdrawer: depositor.address,
+            vault: vault,
+            vaultToken: vaultToken,
+            vaultMint: vaultMint,
+            userVault: user_vault.address,
+            owner: program.provider.wallet.publicKey,
+            tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
+            stakeInfo: stake_info,
+          },
+        })
+      } catch (err) {
+        console.log('err.message:', err.message)
+        assert.ok(err.message.includes('not staked'))
+      }
+    })
 
-  //   it('3-2. Test already claim complete', async () => {
-  //     const stakeAmount = new anchor.BN(120)
-  //     const serial_number = new anchor.BN(1)
-  //     try {
-  //       await program.rpc.unStake(stakeAmount, serial_number, {
-  //         accounts: {
-  //           withdrawer: depositor.address,
-  //           vault: vault,
-  //           vaultToken: vaultToken,
-  //           vaultMint: vaultMint,
-  //           userVault: user_vault.address,
-  //           owner: program.provider.wallet.publicKey,
-  //           tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
-  //           stakeInfo: stake_info,
-  //         },
-  //       })
-  //     } catch (err) {
-  //       assert.ok(err.message.includes('already claim complete'))
-  //     }
-  //   })
+    //   it('3-2. Test already claim complete', async () => {
+    //     const stakeAmount = new anchor.BN(120)
+    //     const serial_number = new anchor.BN(1)
+    //     try {
+    //       await program.rpc.unStake(stakeAmount, serial_number, {
+    //         accounts: {
+    //           withdrawer: depositor.address,
+    //           vault: vault,
+    //           vaultToken: vaultToken,
+    //           vaultMint: vaultMint,
+    //           userVault: user_vault.address,
+    //           owner: program.provider.wallet.publicKey,
+    //           tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
+    //           stakeInfo: stake_info,
+    //         },
+    //       })
+    //     } catch (err) {
+    //       assert.ok(err.message.includes('already claim complete'))
+    //     }
+    //   })
 
-  //   it('3-3. Test stake amount not enough', async () => {
-  //     const stakeAmount = new anchor.BN(120)
-  //     const serial_number = new anchor.BN(1)
-  //     try {
-  //       await program.rpc.unStake(stakeAmount, serial_number, {
-  //         accounts: {
-  //           withdrawer: depositor.address,
-  //           vault: vault,
-  //           vaultToken: vaultToken,
-  //           vaultMint: vaultMint,
-  //           userVault: user_vault.address,
-  //           owner: program.provider.wallet.publicKey,
-  //           tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
-  //           stakeInfo: stake_info,
-  //         },
-  //       })
-  //     } catch (err) {
-  //       assert.ok(err.message.includes('stake amount not enough'))
-  //     }
-  //   })
+    //   it('3-3. Test stake amount not enough', async () => {
+    //     const stakeAmount = new anchor.BN(120)
+    //     const serial_number = new anchor.BN(1)
+    //     try {
+    //       await program.rpc.unStake(stakeAmount, serial_number, {
+    //         accounts: {
+    //           withdrawer: depositor.address,
+    //           vault: vault,
+    //           vaultToken: vaultToken,
+    //           vaultMint: vaultMint,
+    //           userVault: user_vault.address,
+    //           owner: program.provider.wallet.publicKey,
+    //           tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
+    //           stakeInfo: stake_info,
+    //         },
+    //       })
+    //     } catch (err) {
+    //       assert.ok(err.message.includes('stake amount not enough'))
+    //     }
+    //   })
 
-  //   it('3-4. Test lock period has not arrived', async () => {
-  //     const stakeAmount = new anchor.BN(120)
-  //     const serial_number = new anchor.BN(1)
-  //     try {
-  //       await program.rpc.unStake(stakeAmount, serial_number, {
-  //         accounts: {
-  //           withdrawer: depositor.address,
-  //           vault: vault,
-  //           vaultToken: vaultToken,
-  //           vaultMint: vaultMint,
-  //           userVault: user_vault.address,
-  //           owner: program.provider.wallet.publicKey,
-  //           tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
-  //           stakeInfo: stake_info,
-  //         },
-  //       })
-  //     } catch (err) {
-  //       assert.ok(err.message.includes('The lock-up period is not reached'))
-  //     }
-  //   })
+    //   it('3-4. Test lock period has not arrived', async () => {
+    //     const stakeAmount = new anchor.BN(120)
+    //     const serial_number = new anchor.BN(1)
+    //     try {
+    //       await program.rpc.unStake(stakeAmount, serial_number, {
+    //         accounts: {
+    //           withdrawer: depositor.address,
+    //           vault: vault,
+    //           vaultToken: vaultToken,
+    //           vaultMint: vaultMint,
+    //           userVault: user_vault.address,
+    //           owner: program.provider.wallet.publicKey,
+    //           tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
+    //           stakeInfo: stake_info,
+    //         },
+    //       })
+    //     } catch (err) {
+    //       assert.ok(err.message.includes('The lock-up period is not reached'))
+    //     }
+    //   })
 
-  //   it('3-5. Test unStake success', async () => {
-  //     const stakeAmount = new anchor.BN(120)
-  //     const serial_number = new anchor.BN(1)
-  //     await program.rpc.unStake(stakeAmount, serial_number, {
-  //       accounts: {
-  //         withdrawer: depositor.address,
-  //         vault: vault,
-  //         vaultToken: vaultToken,
-  //         vaultMint: vaultMint,
-  //         userVault: user_vault.address,
-  //         owner: program.provider.wallet.publicKey,
-  //         tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
-  //         stakeInfo: stake_info,
-  //       },
-  //     })
-  //     // check success data
-  //   })
-  // })
+    //   it('3-5. Test unStake success', async () => {
+    //     const stakeAmount = new anchor.BN(120)
+    //     const serial_number = new anchor.BN(1)
+    //     await program.rpc.unStake(stakeAmount, serial_number, {
+    //       accounts: {
+    //         withdrawer: depositor.address,
+    //         vault: vault,
+    //         vaultToken: vaultToken,
+    //         vaultMint: vaultMint,
+    //         userVault: user_vault.address,
+    //         owner: program.provider.wallet.publicKey,
+    //         tokenProgram: TokenInstructions.TOKEN_PROGRAM_ID,
+    //         stakeInfo: stake_info,
+    //       },
+    //     })
+    //     // check success data
+    //   })
+  })
 })
