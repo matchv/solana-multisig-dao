@@ -6,12 +6,18 @@ import {
   Connection,
 } from '@solana/web3.js'
 import * as anchor from '@project-serum/anchor'
-
+import fs from 'fs'
 import {
+  Account,
   createMint,
+  mintTo,
   getOrCreateAssociatedTokenAccount,
 } from '@solana/spl-token'
 
+// @ts-ignore
+const stakeData = JSON.parse(fs.readFileSync('.keys/stake_mint.json'))
+const stakePayerKeypair = Keypair.fromSecretKey(new Uint8Array(stakeData))
+// const stakeMintAddress = stakeMintKeypair.publicKey
 class TokenHelper {
   connection: anchor.web3.Connection
   constructor(connection: anchor.web3.Connection) {
@@ -25,26 +31,61 @@ class TokenHelper {
       lamports
     )
     await this.connection.confirmTransaction(signature)
-    console.log('balance:', await this.connection.getBalance(wallet.publicKey))
+    // console.log('balance:', await this.connection.getBalance(wallet.publicKey))
+    return wallet
+  }
+
+  payerWallet = async (lamports = LAMPORTS_PER_SOL) => {
+    const wallet = stakePayerKeypair
+    const signature = await this.connection.requestAirdrop(
+      wallet.publicKey,
+      lamports
+    )
+    await this.connection.confirmTransaction(signature)
+    // console.log('balance:', await this.connection.getBalance(wallet.publicKey))
+    return wallet
+  }
+
+  airdrop = async (wallet: PublicKey, lamports = 20000 * LAMPORTS_PER_SOL) => {
+    const signature = await this.connection.requestAirdrop(wallet, lamports)
+    await this.connection.confirmTransaction(signature)
+    const signature1 = await this.connection.requestAirdrop(wallet, lamports)
+    await this.connection.confirmTransaction(signature1)
+    console.log('balance:', await this.connection.getBalance(wallet))
     return wallet
   }
 
   // create token
-  createToken = async (wallet: Keypair) => {
+  createToken = async (mintAuthority: PublicKey) => {
     const mint = await createMint(
       this.connection,
       await this.randomPayer(),
-      wallet.publicKey,
+      mintAuthority,
       null,
       8 // We are using 9 to match the CLI decimal default exactly
     )
     // console.log(`token address=${mint.toBase58()}`);
-    if (mint) {
-      console.log(`---Mint token: Success---`)
-    } else {
-      console.log(`---Mint token: Fail---`)
-    }
+    // if (mint) {
+    //   console.log(`---Mint token: Success---`)
+    // } else {
+    //   console.log(`---Mint token: Fail---`)
+    // }
     return mint
+  }
+
+  mintTo = async (
+    mint: PublicKey,
+    destination: PublicKey,
+    authority: PublicKey
+  ) => {
+    await mintTo(
+      this.connection,
+      await this.randomPayer(),
+      mint,
+      destination,
+      authority,
+      1000000 * LAMPORTS_PER_SOL // We are using 9 to match the CLI decimal default exactly
+    )
   }
 
   getProgramPDA = async (
@@ -59,12 +100,17 @@ class TokenHelper {
     )
   }
 
-  createATA = async (mint: PublicKey, payer: Keypair, owner: PublicKey) => {
-    const tokenAccount = await getOrCreateAssociatedTokenAccount(
+  createATA = async (
+    mint: PublicKey,
+    owner: PublicKey,
+    isPDA: boolean = false
+  ) => {
+    const tokenAccount: Account = await getOrCreateAssociatedTokenAccount(
       this.connection,
-      payer,
+      await this.randomPayer(),
       mint,
-      owner
+      owner,
+      isPDA
     )
     return tokenAccount
   }

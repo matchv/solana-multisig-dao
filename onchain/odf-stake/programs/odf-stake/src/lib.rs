@@ -26,6 +26,9 @@ pub mod odf_stake {
         vault.min_lock_period = constant::MIN_LOCK_PERIOD;
         vault.max_lock_period = constant::MAX_LOCK_PERIOD;
         vault.apy = constant::BASE_APY;
+
+        let ref mut stake_info = ctx.accounts.stake_info;
+        stake_info.stake_list = Vec::new();
         Ok(())
     }
 
@@ -39,31 +42,6 @@ pub mod odf_stake {
         // check period
         if period < vault.min_lock_period || period > vault.max_lock_period{
             return Err(error!(errors::ErrorCode::InvalidPeriod));
-        }
-
-        // record stake info
-        let ref mut staker_info = ctx.accounts.stake_info;
-        let staker = ctx.accounts.depositor.to_account_info().clone();
-        if staker_info.stake_list.len() > 0 {
-            // foreach stake
-            for stake in staker_info.stake_list.iter_mut(){
-                let serial_number = stake.stake_data.len() as u64;
-                let stake_data = StakeData{
-                    stake_time: SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs(),
-                    stake_amount: amount,
-                    period: period,
-                    apy: vault.apy,
-                    is_claim_complete: false,
-                    serial_number: serial_number + 1,
-                };
-                if stake.staker == staker.key() {
-                    stake.stake_data.push(stake_data)
-                } else {
-                    stake.staker = staker.key();
-                    stake.stake_data.push(stake_data)
-
-                }
-            }
         }
 
         // Transfer to vault_token
@@ -93,6 +71,31 @@ pub mod odf_stake {
                 authority: ctx.accounts.vault.to_account_info().clone(),
                 }, signer);
         token::mint_to(mint_to_ctx, amount)?;
+
+        // record stake info
+        let ref mut staker_info = ctx.accounts.stake_info;
+        let staker = ctx.accounts.depositor.to_account_info().clone();
+        if staker_info.stake_list.len() > 0 {
+            // foreach stake
+            for stake in staker_info.stake_list.iter_mut(){
+                let serial_number = stake.stake_data.len() as u64;
+                let stake_data = StakeData{
+                    stake_time: SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs(),
+                    stake_amount: amount,
+                    period: period,
+                    apy: vault.apy,
+                    is_claim_complete: false,
+                    serial_number: serial_number + 1,
+                };
+                if stake.staker == staker.key() {
+                    stake.stake_data.push(stake_data)
+                } else {
+                    stake.staker = staker.key();
+                    stake.stake_data.push(stake_data)
+                }
+            }
+        }
+
         Ok(())
     }
 
@@ -217,6 +220,16 @@ pub struct Init<'info> {
     /// CHECK:
     #[account(address = spl_token::ID)]
     pub token_program: AccountInfo<'info>,
+
+    #[account(
+        init,
+        seeds = [b"stake", mint_token.key().as_ref(), vault.key().as_ref()],
+        bump,
+        payer=payer,
+        space = size_of::<StakeInfo>() + 8,
+    )]
+    // #[account(mut)]
+    stake_info: Account<'info, StakeInfo>,
 }
 
 #[account]
@@ -253,14 +266,16 @@ pub struct Stake<'info> {
     /// CHECK:
     token_program: AccountInfo<'info>,
 
-    #[account(mut)]
-    stake_info: Account<'info, StakeInfo>
+    #[account( mut )]
+    // #[account(mut)]
+    stake_info: Account<'info, StakeInfo>,
 }
 
-
 #[account]
+#[derive(Debug)]
 pub struct StakeInfo {
     pub stake_list: Vec<StakeList>,
+    // pub system_program: Pubkey,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Debug, Clone)]
